@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greater Works Parish | The Redeemed Christian Church of God</title>
+<meta name="description" content="Greater Works Parish, Redeemed Christian Church of God — Region 11, LP6, Zone 2, Area 2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a href="index.html" class="brand">Greater Works <span>Parish</span></a>
+    <div class="nav-desktop">
+      <nav><ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="give.html">Give</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></nav>
+      <a href="contact.html" class="visit-btn">Join Us Sunday</a>
+    </div>
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html">Home</a><a href="about.html">About</a><a href="sermons.html">Sermons</a>
+    <a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="give.html">Give</a>
+    <a href="prayer.html">Prayer</a><a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<section class="hero">
+  <canvas id="particleField" class="particle-canvas"></canvas>
+  <div class="rays"></div>
+
+  <!-- 1. Denomination heading -->
+  <p class="denom-heading reveal in">The Redeemed Christian<br>Church of God</p>
+
+  <!-- 2. Global family stats -->
+  <p class="stats-caption reveal in">Proudly part of a global movement</p>
+  <div class="impact-stats reveal in">
+    <div class="impact-stat"><div class="num">197<span>+</span></div><div class="lbl">Countries &amp; Territories</div></div>
+    <div class="impact-stat"><div class="num">9M<span>+</span></div><div class="lbl">Members Worldwide</div></div>
+    <div class="impact-stat"><div class="num">50K<span>+</span></div><div class="lbl">Parishes Worldwide</div></div>
+  </div>
+  <p class="stats-source">— RCCG Worldwide</p>
+
+  <!-- Weekly program banner — swap the image weekly -->
+  <div class="weekly-banner reveal in">
+    <div class="wb-tag">This Sunday's Program</div>
+    <div class="wb-frame">
+      <img src="images/weekly-banner.jpg" alt="This week's program banner"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="wb-placeholder">
+        <div class="wb-icon">🖼️</div>
+        <p>Upload this week's flyer as <strong>images/weekly-banner.jpg</strong> — replace that one file each week and it updates here automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-divider"></div>
+
+  <!-- 3. Local identity -->
+  <p class="stats-caption reveal in">Our Parish Identity</p>
+  <div class="identity-strip reveal in">
+    <span>Region 11</span><span>LP6</span><span>Zone 2</span><span>Area 2</span>
+  </div>
+  <h1 class="parish-name">Greater Works <em>Parish</em></h1>
+
+  <!-- 4. Scripture -->
+  <div class="logo-placeholder"></div>
+  <p class="verse-mark">"</p>
+  <p class="verse">He that believeth on me, the works that I do shall he do also; and greater works than these shall he do.</p>
+  <p class="verse-ref">John 14 : 12</p>
+
+  <div class="hero-cta"><a href="contact.html" class="btn-gold">Join Us This Sunday</a></div>
+</section>
+
+<svg class="wave" viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" fill="#FFFFFF"/></svg>
+
+<!-- Weekly program banner — swap the image inside this frame every Sunday -->
+<section class="weekly-banner-section reveal">
+  <div class="eyebrow" style="text-align:center;">This Sunday</div>
+  <h2 class="section-title" style="text-align:center;">This Week's Program</h2>
+  <div class="banner-frame">
+    <!-- Replace this div's content with: <img src="images/this-sunday.jpg" alt="This Sunday's program"> -->
+    <div class="banner-frame-inner">
+      <div class="icon">🖼️</div>
+      <p><strong>Weekly banner goes here.</strong><br>Upload a new image here each Sunday — this week's topic, program flyer, or announcement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Leadership -->
+<section class="leaders reveal">
+  <div class="eyebrow">Our Leadership</div>
+  <h2 class="section-title">Shepherds of the House</h2>
+  <p class="section-sub">Under God's covering, guiding this parish with the word, in prayer, and in love.</p>
+
+  <div style="margin-top:48px;">
+    <div class="leader-row">
+      <div class="leader-photo-lg">EA</div>
+      <div class="leader-text">
+        <div class="rank">General Overseer</div>
+        <h3>Pastor E.A. Adeboye</h3>
+        <p>RCCG Worldwide</p>
+      </div>
+    </div>
+    <div class="leader-row reverse">
+      <div class="leader-photo-lg">UA</div>
+      <div class="leader-text">
+        <div class="rank">Parish Pastor</div>
+        <h3>Pastor Uko B. Akpan</h3>
+        <p>Greater Works Parish</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery-teaser reveal">
+  <div class="eyebrow">Church Life</div>
+  <h2 class="section-title">A Glimpse of Our Family</h2>
+  <div class="teaser-grid">
+    <div class="teaser-tile">📷</div>
+    <div class="teaser-tile">📷</div>
+    <div class="teaser-tile">🎥</div>
+    <div class="teaser-tile">📷</div>
+  </div>
+  <a href="gallery.html" class="tap-more-btn">Tap to See Our Gallery →</a>
+</section>
+
+<section class="gatherings reveal">
+  <div class="section-head">
+    <div class="eyebrow" style="text-align:center;">Our Gatherings</div>
+    <h2 class="section-title">Come As You Are</h2>
+  </div>
+  <div class="program">
+    <div class="program-row">
+      <div class="program-day">Sunday</div>
+      <div class="program-info"><h3>Sunday Service</h3><p>Sunday School 8:00–9:15am, then worship &amp; the Word 9:15–11:30am.</p></div>
+      <div class="program-time">8:00 – 11:30am</div>
+    </div>
+    <div class="program-row">
+      <div class="program-day">Tuesday</div>
+      <div class="program-info"><h3>Digging Deep</h3><p>A space to ask the questions you don't usually get to ask, and go deeper into the word.</p></div>
+      <div class="program-time">6:00 – 8:00pm</div>
+    </div>
+    <div class="program-row">
+      <div class="program-day">Thursday</div>
+      <div class="program-info"><h3>Faith Clinic</h3><p>A dedicated time of prayer — connecting with God and bringing your needs before Him.</p></div>
+      <div class="program-time">6:00 – 8:00pm</div>
+    </div>
+  </div>
+</section>
+
+<section class="giving-banner reveal">
+  <h2>Give As He Has Blessed You</h2>
+  <p>Support the work of the ministry — tithes, offerings, and special seeds, given securely online.</p>
+  <a href="give.html" class="btn-gold">Give Now</a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="brand-foot">Greater Works Parish</div>
+      <p><span class="label">Address:</span> Baoku, Newtown, Ogombo, Ajah, Eti-Osa, Lagos</p>
+      <p><span class="label">Tel:</span> +234 813 672 7332</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul><li><a href="about.html">About</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="give.html">Give</a></li></ul>
+    </div>
+    <div>
+      <h4>Service Times</h4>
+      <ul><li>Sunday: 8:00am – 11:30am</li><li>Digging Deep: Tue, 6–8pm</li><li>Faith Clinic: Thu, 6–8pm</li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Greater Works Parish, RCCG. All Rights Reserved. &nbsp;|&nbsp; Created by <a href="https://dxofficials.pages.dev" target="_blank" rel="noopener">DxOfficials</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
