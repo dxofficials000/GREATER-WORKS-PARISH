@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin Dashboard | Greater Works Parish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .dash-header { background:var(--royal-blue); color:#fff; padding:20px 24px; display:flex; justify-content:space-between; align-items:center; }
+  .dash-header h1 { font-size:1.3rem; }
+  .dash-header button { background:rgba(255,255,255,.15); color:#fff; border:none; padding:10px 18px; border-radius:999px; font-weight:700; cursor:pointer; }
+  .dash-wrap { max-width:720px; margin:0 auto; padding:40px 24px 80px; }
+  .dash-card { background:#fff; border:1px solid #E1E5DF; border-radius:18px; padding:28px; margin-bottom:28px; box-shadow:0 10px 30px rgba(0,0,0,.05); }
+  .dash-card h2 { font-size:1.2rem; margin-bottom:6px; }
+  .dash-card p.help { color:#5C6660; font-size:.9rem; margin-bottom:18px; }
+  .current-preview { width:120px; height:120px; border-radius:12px; object-fit:cover; margin-bottom:16px; border:1px solid #E1E5DF; display:block; }
+  .status-msg { font-size:.9rem; margin-top:10px; display:none; }
+  .status-msg.ok { color:var(--meadow); }
+  .status-msg.err { color:var(--crimson); }
+  .gallery-admin-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; margin-top:16px; }
+  .gallery-admin-item { position:relative; }
+  .gallery-admin-item img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:10px; }
+  .gallery-admin-item button { position:absolute; top:6px; right:6px; background:var(--crimson); color:#fff; border:none; width:26px; height:26px; border-radius:50%; font-size:.85rem; cursor:pointer; }
+  #authGate { min-height:100vh; display:flex; align-items:center; justify-content:center; color:#5C6660; }
+</style>
+</head>
+<body>
+
+<div id="authGate">Checking access…</div>
+
+<div id="dashboardContent" style="display:none;">
+  <div class="dash-header">
+    <h1>Parish Admin — Pastor Akpan</h1>
+    <button id="logoutBtn">Log Out</button>
+  </div>
+
+  <div class="dash-wrap">
+
+    <div class="dash-card">
+      <h2>General Overseer Photo</h2>
+      <p class="help">Replaces the photo shown on the homepage leadership section.</p>
+      <img id="goPreview" class="current-preview" src="" alt="Current GO photo" style="display:none;">
+      <input type="file" id="goFile" accept="image/*">
+      <div class="status-msg" id="goStatus"></div>
+    </div>
+
+    <div class="dash-card">
+      <h2>Parish Pastor Photo</h2>
+      <p class="help">Replaces Pastor Akpan's photo on the homepage.</p>
+      <img id="pastorPreview" class="current-preview" src="" alt="Current pastor photo" style="display:none;">
+      <input type="file" id="pastorFile" accept="image/*">
+      <div class="status-msg" id="pastorStatus"></div>
+    </div>
+
+    <div class="dash-card">
+      <h2>This Sunday's Banner</h2>
+      <p class="help">Upload a new flyer/topic image each week — replaces the homepage banner.</p>
+      <img id="bannerPreview" class="current-preview" src="" alt="Current banner" style="display:none;">
+      <input type="file" id="bannerFile" accept="image/*">
+      <div class="status-msg" id="bannerStatus"></div>
+    </div>
+
+    <div class="dash-card">
+      <h2>Gallery Photos</h2>
+      <p class="help">Add a new photo to the public Gallery page.</p>
+      <input type="file" id="galleryFile" accept="image/*">
+      <div class="status-msg" id="galleryStatus"></div>
+      <div class="gallery-admin-grid" id="galleryAdminGrid"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+  const authGate = document.getElementById("authGate");
+  const dashboardContent = document.getElementById("dashboardContent");
+  const ALLOWED_ADMIN_EMAIL = "greaterworksparish04@gmail.com";
+
+  auth.onAuthStateChanged((user) => {
+    if (!user || !user.email || user.email.toLowerCase() !== ALLOWED_ADMIN_EMAIL) {
+      if (user) auth.signOut();
+      window.location.href = "admin-login.html";
+    } else {
+      authGate.style.display = "none";
+      dashboardContent.style.display = "block";
+      loadCurrentContent();
+      loadGallery();
+    }
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    auth.signOut().then(() => (window.location.href = "admin-login.html"));
+  });
+
+  function showStatus(id, message, ok) {
+    const el = document.getElementById(id);
+    el.textContent = message;
+    el.className = "status-msg " + (ok ? "ok" : "err");
+    el.style.display = "block";
+  }
+
+  // ---- Leadership photos + weekly banner ----
+  async function loadCurrentContent() {
+    const doc = await db.collection("site_content").doc("leadership").get();
+    const data = doc.exists ? doc.data() : {};
+    if (data.goPhotoUrl) {
+      document.getElementById("goPreview").src = data.goPhotoUrl;
+      document.getElementById("goPreview").style.display = "block";
+    }
+    if (data.pastorPhotoUrl) {
+      document.getElementById("pastorPreview").src = data.pastorPhotoUrl;
+      document.getElementById("pastorPreview").style.display = "block";
+    }
+    if (data.bannerUrl) {
+      document.getElementById("bannerPreview").src = data.bannerUrl;
+      document.getElementById("bannerPreview").style.display = "block";
+    }
+  }
+
+  function wireUpload(fileInputId, statusId, previewId, fieldName) {
+    document.getElementById(fileInputId).addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      showStatus(statusId, "Uploading…", true);
+      try {
+        const url = await uploadToCloudinary(file);
+        await db.collection("site_content").doc("leadership").set(
+          { [fieldName]: url, updatedAt: new Date().toISOString() },
+          { merge: true }
+        );
+        document.getElementById(previewId).src = url;
+        document.getElementById(previewId).style.display = "block";
+        showStatus(statusId, "Saved — live on the site now.", true);
+      } catch (err) {
+        showStatus(statusId, "Upload failed. Check your connection and try again.", false);
+      }
+    });
+  }
+  wireUpload("goFile", "goStatus", "goPreview", "goPhotoUrl");
+  wireUpload("pastorFile", "pastorStatus", "pastorPreview", "pastorPhotoUrl");
+  wireUpload("bannerFile", "bannerStatus", "bannerPreview", "bannerUrl");
+
+  // ---- Gallery ----
+  async function loadGallery() {
+    const grid = document.getElementById("galleryAdminGrid");
+    grid.innerHTML = "";
+    const snapshot = await db.collection("gallery").orderBy("uploadedAt", "desc").get();
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const item = document.createElement("div");
+      item.className = "gallery-admin-item";
+      item.innerHTML =
+        '<img src="' + data.url + '" alt="Gallery photo">' +
+        '<button data-id="' + doc.id + '">×</button>';
+      grid.appendChild(item);
+    });
+    grid.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        await db.collection("gallery").doc(btn.dataset.id).delete();
+        loadGallery();
+      });
+    });
+  }
+
+  document.getElementById("galleryFile").addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    showStatus("galleryStatus", "Uploading…", true);
+    try {
+      const url = await uploadToCloudinary(file);
+      await db.collection("gallery").add({ url, uploadedAt: new Date().toISOString() });
+      showStatus("galleryStatus", "Added to gallery.", true);
+      loadGallery();
+    } catch (err) {
+      showStatus("galleryStatus", "Upload failed. Try again.", false);
+    }
+  });
+</script>
+</body>
+</html>
