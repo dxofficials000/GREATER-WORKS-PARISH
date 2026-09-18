@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery | Greater Works Parish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <a href="index.html" class="brand">Greater Works <span>Parish</span></a>
+    <div class="nav-desktop">
+      <nav><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="give.html">Give</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></nav>
+      <a href="contact.html" class="visit-btn">Join Us Sunday</a>
+    </div>
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html">Home</a><a href="about.html">About</a><a href="sermons.html">Sermons</a>
+    <a href="events.html">Events</a><a href="gallery.html">Gallery</a><a href="give.html">Give</a>
+    <a href="prayer.html">Prayer</a><a href="contact.html">Contact</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="eyebrow">Church Life</div>
+  <h1>Gallery</h1>
+  <p>Photos and videos from our celebrations and services.</p>
+</section>
+
+<section class="section reveal">
+  <div class="gallery-grid" id="galleryGrid"></div>
+  <p id="galleryEmpty" style="text-align:center; color:#5C6660; display:none;">
+    No photos or videos added yet.
+  </p>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="brand-foot">Greater Works Parish</div>
+      <p><span class="label">Address:</span> Baoku, Newtown, Ogombo, Ajah, Eti-Osa, Lagos</p>
+      <p><span class="label">Tel:</span> +234 813 672 7332</p>
+      <div class="footer-socials">
+        <a href="mailto:greaterworksparish04@gmail.com" aria-label="Email" title="Email">✉️</a>
+        <a href="https://www.instagram.com/greaterworksparish" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">📸</a>
+        <a href="https://www.facebook.com/share/1BfPuKQZQo/" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">📘</a>
+        <a href="#" target="_blank" rel="noopener" aria-label="TikTok" title="TikTok (link needed)">🎵</a>
+      </div>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul><li><a href="about.html">About</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="give.html">Give</a></li></ul>
+    </div>
+    <div>
+      <h4>Service Times</h4>
+      <ul><li>Sunday: 8:00am – 11:30am</li><li>Digging Deep: Tue, 6–8pm</li><li>Faith Clinic: Thu, 6–8pm</li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Greater Works Parish, RCCG. All Rights Reserved. &nbsp;|&nbsp; Created by <a href="https://dxofficials.pages.dev" target="_blank" rel="noopener">DxOfficials</a>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="gallery-data.js"></script>
+<script src="script.js"></script>
+<script>
+  (async function () {
+    const grid = document.getElementById('galleryGrid');
+    const emptyMsg = document.getElementById('galleryEmpty');
+    if (!grid) return;
+
+    function isVideoUrl(url) {
+      return /\.(mp4|mov|webm|m4v)($|\?)/i.test(url);
+    }
+
+    function renderItem(src, downloadable) {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      const video = isVideoUrl(src);
+      item.innerHTML =
+        (video
+          ? '<video src="' + src + '" style="width:100%; height:100%; object-fit:cover;" muted playsinline controls></video><span class="badge">Video</span>'
+          : '<img src="' + src + '" alt="Greater Works Parish photo" style="width:100%; height:100%; object-fit:cover;"><span class="badge">Photo</span>') +
+        (downloadable ? '<a href="' + src + '" download class="download">Download</a>' : '');
+      grid.appendChild(item);
+    }
+
+    let loadedFromFirestore = false;
+    try {
+      const snapshot = await db.collection('gallery').orderBy('uploadedAt', 'desc').get();
+      if (!snapshot.empty) {
+        snapshot.forEach((doc) => renderItem(doc.data().url, true));
+        loadedFromFirestore = true;
+      }
+    } catch (err) {
+      console.warn('Firestore gallery unavailable, using local list:', err);
+    }
+
+    if (!loadedFromFirestore) {
+      if (typeof galleryPhotos !== 'undefined' && galleryPhotos.length > 0) {
+        galleryPhotos.forEach((src) => renderItem(src, true));
+      } else {
+        emptyMsg.style.display = 'block';
+      }
+    }
+  })();
+</script>
+</body>
+</html>
